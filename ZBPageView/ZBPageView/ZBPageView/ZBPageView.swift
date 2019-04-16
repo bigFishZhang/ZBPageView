@@ -25,7 +25,7 @@ class ZBPageView: UIView {
         self.style    = style
         
         super.init(frame: frame)
-        
+        setupUI()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -39,6 +39,7 @@ extension ZBPageView {
         setupTitleView()
         setupContentView()
     }
+    
     private func  setupTitleView() {
         let titleFrame = CGRect(x: 0, y: 0, width: bounds.width, height: style.titleHeight)
         titleView  = ZBTitleView(frame: titleFrame, titles: titles)
