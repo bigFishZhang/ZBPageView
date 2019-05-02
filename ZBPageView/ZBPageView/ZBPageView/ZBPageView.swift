@@ -36,16 +36,19 @@ class ZBPageView: UIView {
 // MARK UI设置
 extension ZBPageView {
     fileprivate func setupUI(){
+        
         setupTitleView()
+        
         setupContentView()
     }
     
     private func  setupTitleView() {
         let titleFrame = CGRect(x: 0, y: 0, width: bounds.width, height: style.titleHeight)
-        titleView  = ZBTitleView(frame: titleFrame, titles: titles)
+        titleView  = ZBTitleView(frame: titleFrame, titles: titles ,style: style)
         addSubview(titleView)
         titleView.backgroundColor = UIColor.randomColor()
     }
+    
     private func setupContentView() {
         
         let ContentFrame = CGRect(x: 0,
@@ -54,8 +57,11 @@ extension ZBPageView {
                                   height: bounds.height - style.titleHeight)
         
         let contentView = ZBContentView(frame: ContentFrame, childVcs: childVcs, parentVc: parentVc)
-        contentView.backgroundColor = UIColor.randomColor()
+        
         addSubview(contentView)
+        
+        contentView.backgroundColor = UIColor.randomColor()
+        
         
     }
     

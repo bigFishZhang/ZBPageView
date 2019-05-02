@@ -24,6 +24,10 @@ class ZBContentView: UIView {
        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: kContentCellId)
+        collectionView.isPagingEnabled = true
+        collectionView.bounces = false
+        collectionView.scrollsToTop = false
+        collectionView.showsHorizontalScrollIndicator = false
         return collectionView
         
     }()
@@ -33,10 +37,6 @@ class ZBContentView: UIView {
         self.childVcs = childVcs
         self.parentVc = parentVc
         super.init(frame: frame)
-        collectionView.isPagingEnabled = true
-        collectionView.bounces = false
-        collectionView.scrollsToTop = false
-        collectionView.showsHorizontalScrollIndicator = false
         setupUI()
     }
     
@@ -47,16 +47,13 @@ class ZBContentView: UIView {
 }
 
 extension ZBContentView {
+    //自控制器加到父控制器中
     fileprivate func setupUI() {
         for vc in childVcs {
             parentVc.addChild(vc)
         }
-        
         addSubview(collectionView)
-        
     }
-    
-    
 }
 
 
