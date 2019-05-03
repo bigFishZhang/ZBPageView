@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+
 class ZBPageView: UIView {
 
     fileprivate var titles   : [String]
@@ -62,13 +64,13 @@ extension ZBPageView {
         
         contentView.backgroundColor = UIColor.randomColor()
         
+        titleView.delegate = contentView
+        contentView.delegate = titleView
         
     }
     
-    
-    
-    
 }
+
 
 
 

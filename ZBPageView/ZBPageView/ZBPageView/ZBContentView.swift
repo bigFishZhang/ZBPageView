@@ -9,10 +9,19 @@
 import UIKit
 
 private let kContentCellId = "kContentCellId"
+
+protocol ZBContentViewDelegate:class {
+    func contentView(_ contentView:ZBContentView,targetIndex:Int)
+    func contentView(_ contentView:ZBContentView,targetIndex:Int,progress:CGFloat)
+}
+
 class ZBContentView: UIView {
+    weak var delegate:ZBContentViewDelegate?
     
     fileprivate var childVcs: [UIViewController]
     fileprivate var parentVc: UIViewController
+    //记录点击瞬间偏移量
+    fileprivate var startOffsetX:CGFloat = 0
     
     fileprivate lazy var collectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -27,6 +36,7 @@ class ZBContentView: UIView {
         collectionView.isPagingEnabled = true
         collectionView.bounces = false
         collectionView.scrollsToTop = false
+        collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
         return collectionView
         
@@ -73,7 +83,72 @@ extension ZBContentView :UICollectionViewDataSource {
         cell.contentView.addSubview(childVc.view)
         return cell
     }
+}
+// MARK:UICollectionView delegate
+extension ZBContentView:UICollectionViewDelegate{
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        contentEndScroll()
+    }
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate{
+            contentEndScroll()
+        }
+    }
+    private func contentEndScroll(){
+        //1 获取滚动到的位置
+        let currentIndex = Int(collectionView.contentOffset.x / collectionView.bounds.width)
+        //2 通知title调整
+        delegate?.contentView(self, targetIndex: currentIndex)
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        startOffsetX = scrollView.contentOffset.x
+        
+    }
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // 0 判断偏移量和开始时是否一致
+        guard startOffsetX != scrollView.contentOffset.x else {
+            return
+        }
+        // 1 定义
+        var targetIndex = 0
+        var progress:CGFloat = 0.0
+        
+        // 2 赋值
+        let currentIndex = Int(startOffsetX / scrollView.bounds.width )
+        if startOffsetX < scrollView.contentOffset.x { //左滑动
+            targetIndex  = currentIndex + 1
+            if targetIndex > childVcs.count - 1{
+                targetIndex = childVcs.count - 1
+            }
+            
+            progress = (scrollView.contentOffset.x - startOffsetX) / scrollView.bounds.width
+            
+        }else{//右滑动
+            targetIndex  = currentIndex - 1
+            if targetIndex < 0 {
+                targetIndex  = 0
+            }
+             progress = (startOffsetX - scrollView.contentOffset.x) / scrollView.bounds.width
+        }
+        
+        // 3 通知代理
+        delegate?.contentView(self, targetIndex: targetIndex, progress: progress)
+        
+        
+    }
     
     
     
+}
+
+
+// MARK: titleView delegate
+extension ZBContentView:ZBTitleViewDelegate{
+    func titleView(_ titleView: ZBTitleView, targetIndex: Int) {
+        let indexPath = IndexPath(item: targetIndex, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .left, animated: false)
+    }
 }
