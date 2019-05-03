@@ -23,6 +23,8 @@ class ZBContentView: UIView {
     //记录点击瞬间偏移量
     fileprivate var startOffsetX:CGFloat = 0
     
+    fileprivate var isForbiddenScroll:Bool = false
+    
     fileprivate lazy var collectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = self.bounds.size
@@ -86,6 +88,7 @@ extension ZBContentView :UICollectionViewDataSource {
 }
 // MARK:UICollectionView delegate
 extension ZBContentView:UICollectionViewDelegate{
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         contentEndScroll()
     }
@@ -95,6 +98,9 @@ extension ZBContentView:UICollectionViewDelegate{
         }
     }
     private func contentEndScroll(){
+        //0 判断是否禁止
+        guard !isForbiddenScroll else {return}
+        
         //1 获取滚动到的位置
         let currentIndex = Int(collectionView.contentOffset.x / collectionView.bounds.width)
         //2 通知title调整
@@ -102,14 +108,17 @@ extension ZBContentView:UICollectionViewDelegate{
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+         isForbiddenScroll = false
         startOffsetX = scrollView.contentOffset.x
         
     }
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        //0 判断是否禁止
+//        guard !isForbiddenScroll else {return}
         // 0 判断偏移量和开始时是否一致
-        guard startOffsetX != scrollView.contentOffset.x else {
+        guard startOffsetX != scrollView.contentOffset.x,!isForbiddenScroll else {
             return
         }
         // 1 定义
@@ -148,6 +157,7 @@ extension ZBContentView:UICollectionViewDelegate{
 // MARK: titleView delegate
 extension ZBContentView:ZBTitleViewDelegate{
     func titleView(_ titleView: ZBTitleView, targetIndex: Int) {
+        isForbiddenScroll = true
         let indexPath = IndexPath(item: targetIndex, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .left, animated: false)
     }

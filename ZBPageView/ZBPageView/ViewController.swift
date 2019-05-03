@@ -14,14 +14,14 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         automaticallyAdjustsScrollViewInsets = false
-        
+//        let titles  = ["DNF","编程大赛","英雄联盟","王者","绝地求生"]
         let titles  = ["DNF","编程大赛","英雄联盟","王者","绝地求生","皇室战争","MSI冠军"]
         
         //TitleStyle样式
         let style = ZBTitleStyle()
         style.titleHeight = 44
         style.isScrollEnable = true
-        
+        style.isShowScrollLine = true
         // 初始化所有子控制器
         var childVcs = [UIViewController]()
         for _ in 0..<titles.count {

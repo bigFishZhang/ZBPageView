@@ -30,6 +30,15 @@ class ZBTitleView: UIView {
        return scrollView
     }()
     
+    fileprivate lazy var bottomLine:UIView = {
+        let bottomLine = UIView()
+        bottomLine.backgroundColor = self.style.scrollLineColor
+        bottomLine.frame.size.height =  self.style.scrollLineHeight
+        bottomLine.frame.origin.y = self.bounds.height - self.style.scrollLineHeight
+        return bottomLine
+    }()
+    
+    
     init(frame: CGRect,titles:[String],style:ZBTitleStyle) {
         self.titles = titles
         self.style  = style
@@ -54,6 +63,11 @@ extension ZBTitleView {
         setupTitleLabel()
         //3 设置titlelabes的Frame
         setupTitleLabelFrame()
+        //4 设置滚动条
+        if style.isShowScrollLine{
+             scrollView.addSubview(bottomLine)
+        }
+       
         
     }
     
@@ -76,9 +90,6 @@ extension ZBTitleView {
             let tapGes = UITapGestureRecognizer(target: self, action: #selector(titleLableClick(_:)))
             titleLabel.addGestureRecognizer(tapGes)
             titleLabel.isUserInteractionEnabled = true
-            
-            
-            
         }
         
     }
@@ -94,6 +105,11 @@ extension ZBTitleView {
                 w =   (titles[i] as NSString).boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 0), options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font:style.fontSize], context: nil).width
                 if i == 0{
                     x = style.itemMargin  * 0.5
+                    if style.isShowScrollLine{
+                        bottomLine.frame.origin.x = x
+                        bottomLine.frame.size.width =  w
+                    }
+                    
                 }else{
                     let preLabel = titleLabels[i-1]
                     x = preLabel.frame.maxX + style.itemMargin
@@ -102,6 +118,11 @@ extension ZBTitleView {
                 
                 w = bounds.width / CGFloat(count)
                 x = w * CGFloat(i)
+                if i == 0 && style.isShowScrollLine{
+                    bottomLine.frame.origin.x = 0
+                    bottomLine.frame.size.width = w
+                }
+             
             }
             
             label.frame = CGRect(x: x, y: y, width: w, height: h)
@@ -118,10 +139,19 @@ extension ZBTitleView{
     @objc fileprivate func titleLableClick(_ tapGes:UITapGestureRecognizer){
         //1 取出点击的View
         let targetLabel = tapGes.view as! UILabel
-        
+        //2 调整title
         adjustTitleLabel(targetIndex: targetLabel.tag)
+        //3 调整bottomLine
+        if style.isShowScrollLine {
+            UIView.animate(withDuration: 0.25, animations: {
+                self.bottomLine.frame.origin.x = targetLabel.frame.origin.x
+                self.bottomLine.frame.size.width = targetLabel.frame.width
+            })
+        }
+       
         
-        //3 通知contentView
+        
+        //4 通知contentView
         delegate?.titleView(self, targetIndex: currentIndex)
     }
     
@@ -169,6 +199,13 @@ extension ZBTitleView:ZBContentViewDelegate{
         targetLabel.textColor = UIColor(r: normalRGB.0 + deltaRGB.0 * progress , g:  normalRGB.1 + deltaRGB.1 * progress, b:  normalRGB.2 + deltaRGB.2 * progress)
         sourceLabel.textColor = UIColor(r: selectedRGB.0 - deltaRGB.0 * progress , g:  selectedRGB.1 - deltaRGB.1 * progress, b:  selectedRGB.2 - deltaRGB.2 * progress)
         
+        // 3.渐变BottomLine
+        if style.isShowScrollLine {
+            let deltaX = targetLabel.frame.origin.x - sourceLabel.frame.origin.x
+            let deltaW = targetLabel.frame.width - sourceLabel.frame.width
+            bottomLine.frame.origin.x = sourceLabel.frame.origin.x + deltaX * progress
+            bottomLine.frame.size.width = sourceLabel.frame.width + deltaW * progress
+        }
     }
 
     
