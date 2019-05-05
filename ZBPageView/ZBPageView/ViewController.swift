@@ -9,13 +9,37 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //            addPageView()
+        addPageCollectionView()
+    }
+    
+    func addPageCollectionView()  {
         automaticallyAdjustsScrollViewInsets = false
-//        let titles  = ["DNF","编程大赛","英雄联盟","王者","绝地求生"]
-        let titles  = ["DNF","编程大赛","英雄联盟","王者","绝地求生","皇室战争","MSI冠军"]
+        let titles  = ["DNF","编程大赛","英雄联盟","王者"]
+        
+        //TitleStyle样式
+        let style = ZBTitleStyle()
+        style.isShowScrollLine  = true
+        // 初始化所有子控制器
+        
+        
+        let layout = UICollectionViewFlowLayout()
+//        layout.
+        //创建 pageView
+        let pageFrame = CGRect(x: 0, y: 64, width: view.bounds.width, height: view.bounds.height-64)
+        let pageCollectionView = ZBPageCollectionView(frame: pageFrame, titles: titles, style: style, isTitleInTop: true, layout: layout)
+        
+        //pageView添加到控制器的View中
+        view.addSubview(pageCollectionView)
+    }
+    
+    func addPageView()  {
+        automaticallyAdjustsScrollViewInsets = false
+        let titles  = ["DNF","编程大赛","英雄联盟","王者","绝地求生"]
         
         //TitleStyle样式
         let style = ZBTitleStyle()
@@ -40,10 +64,8 @@ class ViewController: UIViewController {
         
         //pageView添加到控制器的View中
         view.addSubview(pageView)
-        
-
     }
-
-
+    
+    
 }
 

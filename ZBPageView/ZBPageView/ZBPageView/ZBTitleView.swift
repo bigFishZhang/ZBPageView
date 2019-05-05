@@ -24,10 +24,10 @@ class ZBTitleView: UIView {
     fileprivate lazy var titleLabels:[UILabel] = [UILabel]()
     
     fileprivate lazy var scrollView:UIScrollView = {
-       let scrollView = UIScrollView(frame: self.bounds)
-       scrollView.showsHorizontalScrollIndicator = false
-       scrollView.scrollsToTop = false
-       return scrollView
+        let scrollView = UIScrollView(frame: self.bounds)
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.scrollsToTop = false
+        return scrollView
     }()
     
     fileprivate lazy var bottomLine:UIView = {
@@ -65,9 +65,9 @@ extension ZBTitleView {
         setupTitleLabelFrame()
         //4 设置滚动条
         if style.isShowScrollLine{
-             scrollView.addSubview(bottomLine)
+            scrollView.addSubview(bottomLine)
         }
-       
+        
         
     }
     
@@ -104,7 +104,7 @@ extension ZBTitleView {
             if style.isScrollEnable {//可以滚动
                 w =   (titles[i] as NSString).boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 0), options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font:style.fontSize], context: nil).width
                 if i == 0{
-                    x = style.itemMargin  * 0.5
+                    x = style.titleMargin  * 0.5
                     if style.isShowScrollLine{
                         bottomLine.frame.origin.x = x
                         bottomLine.frame.size.width =  w
@@ -112,7 +112,7 @@ extension ZBTitleView {
                     
                 }else{
                     let preLabel = titleLabels[i-1]
-                    x = preLabel.frame.maxX + style.itemMargin
+                    x = preLabel.frame.maxX + style.titleMargin
                 }
             }else{
                 
@@ -122,14 +122,14 @@ extension ZBTitleView {
                     bottomLine.frame.origin.x = 0
                     bottomLine.frame.size.width = w
                 }
-             
+                
             }
             
             label.frame = CGRect(x: x, y: y, width: w, height: h)
         }
         
         
-        scrollView.contentSize = style.isScrollEnable ?  CGSize(width: titleLabels.last!.frame.maxX+style.itemMargin*0.5, height: 0):CGSize.zero
+        scrollView.contentSize = style.isScrollEnable ?  CGSize(width: titleLabels.last!.frame.maxX+style.titleMargin*0.5, height: 0):CGSize.zero
         
     }
     
@@ -148,7 +148,7 @@ extension ZBTitleView{
                 self.bottomLine.frame.size.width = targetLabel.frame.width
             })
         }
-       
+        
         
         
         //4 通知contentView
@@ -165,7 +165,7 @@ extension ZBTitleView{
         //2 切换颜色
         sourceLabel.textColor = style.normalColor
         targetLabel.textColor = style.selectedColor
-       
+        
         //3 记录下标
         currentIndex = targetIndex
         //4 调整位置
@@ -185,7 +185,7 @@ extension ZBTitleView{
 extension ZBTitleView:ZBContentViewDelegate{
     
     func contentView(_ contentView: ZBContentView, targetIndex: Int) {
-       adjustTitleLabel(targetIndex: targetIndex)
+        adjustTitleLabel(targetIndex: targetIndex)
         
     }
     func contentView(_ contentView: ZBContentView, targetIndex: Int, progress: CGFloat) {
@@ -207,6 +207,6 @@ extension ZBTitleView:ZBContentViewDelegate{
             bottomLine.frame.size.width = sourceLabel.frame.width + deltaW * progress
         }
     }
-
+    
     
 }

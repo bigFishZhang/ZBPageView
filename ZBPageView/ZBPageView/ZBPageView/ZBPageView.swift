@@ -8,25 +8,30 @@
 
 import UIKit
 
-
-
 class ZBPageView: UIView {
-
-    fileprivate var titles   : [String]
-    fileprivate var childVcs : [UIViewController]
-    fileprivate var parentVc : UIViewController
-    fileprivate var style    : ZBTitleStyle
+    
+    fileprivate var titles   : [String]!
+    fileprivate var childVcs : [UIViewController]!
+    fileprivate var parentVc : UIViewController!
+    fileprivate var style    : ZBTitleStyle!
     fileprivate var titleView: ZBTitleView!
     
     init(frame: CGRect,titles:[String],childVcs:[UIViewController],
          parentVc:UIViewController,style:ZBTitleStyle) {
+        super.init(frame: frame)
+        
+        guard titles.count == childVcs.count else {
+            print("标题&控制器个数不同,请检测!!!")
+            return
+        }
         
         self.titles   = titles
         self.childVcs = childVcs
         self.parentVc = parentVc
         self.style    = style
         
-        super.init(frame: frame)
+        parentVc.automaticallyAdjustsScrollViewInsets = false
+        
         setupUI()
     }
     
@@ -65,6 +70,7 @@ extension ZBPageView {
         contentView.backgroundColor = UIColor.randomColor()
         
         titleView.delegate = contentView
+        
         contentView.delegate = titleView
         
     }

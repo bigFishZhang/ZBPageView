@@ -17,6 +17,7 @@
 		789557832264D57000267524 /* ZBContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789557822264D57000267524 /* ZBContentView.swift */; };
 		789557862264D84700267524 /* UIColor+ZBExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789557852264D84700267524 /* UIColor+ZBExtension.swift */; };
 		789557882264DD4F00267524 /* ZBTitleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789557872264DD4F00267524 /* ZBTitleStyle.swift */; };
+		D19B1684227F3A45003360E4 /* ZBPageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B1683227F3A45003360E4 /* ZBPageCollectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		789557822264D57000267524 /* ZBContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZBContentView.swift; sourceTree = "<group>"; };
 		789557852264D84700267524 /* UIColor+ZBExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+ZBExtension.swift"; sourceTree = "<group>"; };
 		789557872264DD4F00267524 /* ZBTitleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZBTitleStyle.swift; sourceTree = "<group>"; };
+		D19B1683227F3A45003360E4 /* ZBPageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZBPageCollectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 				789557802264D56300267524 /* ZBTitleView.swift */,
 				789557822264D57000267524 /* ZBContentView.swift */,
 				789557872264DD4F00267524 /* ZBTitleStyle.swift */,
+				D19B1683227F3A45003360E4 /* ZBPageCollectionView.swift */,
 			);
 			path = ZBPageView;
 			sourceTree = "<group>";
@@ -171,6 +174,7 @@
 				789557812264D56300267524 /* ZBTitleView.swift in Sources */,
 				789557862264D84700267524 /* UIColor+ZBExtension.swift in Sources */,
 				789557882264DD4F00267524 /* ZBTitleStyle.swift in Sources */,
+				D19B1684227F3A45003360E4 /* ZBPageCollectionView.swift in Sources */,
 				789557682264D4AF00267524 /* AppDelegate.swift in Sources */,
 				7895577B2264D52600267524 /* ZBPageView.swift in Sources */,
 			);
