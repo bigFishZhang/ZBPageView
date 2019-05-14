@@ -18,7 +18,7 @@ class ZBPageCollectionView: UIView {
          titles:[String],
          style:ZBTitleStyle,
          isTitleInTop:Bool,
-         layout:UICollectionViewFlowLayout) {
+         layout:ZBPageCollectionViewFlowLayout) {
         
         self.titles = titles
         self.isTitleInTop = isTitleInTop
