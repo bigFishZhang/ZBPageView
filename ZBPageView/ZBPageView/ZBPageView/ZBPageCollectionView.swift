@@ -8,13 +8,24 @@
 
 import UIKit
 
-private let kCollectionViewCell = "kCollectionViewCell"
+protocol ZBPageCollectionViewDataSource:class {
+    func numberOfSections(in pageCollectionView: ZBPageCollectionView)-> Int
+    func pageCollectionView(_ collectionView: ZBPageCollectionView, numberOfItemsInSection section: Int) -> Int
+    func pageCollectionView(_ pageCollectionView: ZBPageCollectionView,_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
+    
+}
+
+
 
 class ZBPageCollectionView: UIView {
+    
+    weak var dataSource:ZBPageCollectionViewDataSource?
+    
     fileprivate var titles:[String]
     fileprivate var isTitleInTop:Bool
     fileprivate var layout:UICollectionViewFlowLayout
     fileprivate var style:ZBTitleStyle
+    fileprivate var collectionView:UICollectionView!
     
     init(frame: CGRect,
          titles:[String],
@@ -26,6 +37,7 @@ class ZBPageCollectionView: UIView {
         self.isTitleInTop = isTitleInTop
         self.layout = layout
         self.style = style
+       
         
         super.init(frame: frame)
         
@@ -37,6 +49,8 @@ class ZBPageCollectionView: UIView {
     }
 }
 
+
+// MARK: - 设置界面
 extension ZBPageCollectionView {
     fileprivate func setupUI(){
         // 1 creat title view
@@ -58,9 +72,8 @@ extension ZBPageCollectionView {
         // 3 creat UICollectionView
         let collectionViewY = isTitleInTop ? style.titleHeight : 0
         let collectionViewFrame = CGRect(x: 0, y: collectionViewY, width: bounds.width, height: bounds.height - style.titleHeight - pageControlHeight)
-        let collectionView = UICollectionView(frame: collectionViewFrame, collectionViewLayout: layout)
+        collectionView = UICollectionView(frame: collectionViewFrame, collectionViewLayout: layout)
         collectionView.dataSource = self;
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: kCollectionViewCell)
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = UIColor.randomColor()
@@ -69,22 +82,33 @@ extension ZBPageCollectionView {
     }
 }
 
+// MARK: - 对外暴露的方法
+extension ZBPageCollectionView{
+    
+    func register(cell:AnyClass?, identifier:String)  {
+        collectionView.register(cell, forCellWithReuseIdentifier: identifier)
+    }
+    
+    func register(nib:UINib, identifier:String)  {
+        collectionView.register(nib, forCellWithReuseIdentifier: identifier)
+        
+    }
+}
+
+
+// MARK: - UICollectionViewDataSource
 extension ZBPageCollectionView:UICollectionViewDataSource{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        return titles.count;
-        return 4;
+        return dataSource?.numberOfSections(in: self) ?? 0;
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Int(arc4random_uniform(30)) + 30;
+        return dataSource?.pageCollectionView(self, numberOfItemsInSection: section) ?? 0;
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: kCollectionViewCell, for: indexPath)
         
-        cell.backgroundColor  = UIColor.randomColor()
-        
-        return cell
+        return dataSource!.pageCollectionView(self, collectionView, cellForItemAt: indexPath)
     }
     
     

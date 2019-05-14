@@ -8,6 +8,9 @@
 
 import UIKit
 
+
+private let kEmotionCell = "kEmotionCell"
+
 class ViewController: UIViewController {
     
     override func viewDidLoad() {
@@ -37,7 +40,8 @@ class ViewController: UIViewController {
         //创建 pageView
         let pageFrame = CGRect(x: 0, y: 64, width: view.bounds.width, height:300)
         let pageCollectionView = ZBPageCollectionView(frame: pageFrame, titles: titles, style: style, isTitleInTop: false, layout: layout)
-        
+        pageCollectionView.dataSource = self;
+        pageCollectionView.register(cell: UICollectionViewCell.self, identifier: kEmotionCell)
         //pageView添加到控制器的View中
         view.addSubview(pageCollectionView)
     }
@@ -72,6 +76,20 @@ class ViewController: UIViewController {
         view.addSubview(pageView)
     }
     
-    
 }
 
+extension ViewController:ZBPageCollectionViewDataSource{
+    
+    func pageCollectionView(_ pageCollectionView: ZBPageCollectionView, _ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: kEmotionCell, for: indexPath)
+        cell.backgroundColor = UIColor.randomColor()
+        return cell
+    }
+    func numberOfSections(in pageCollectionView: ZBPageCollectionView) -> Int {
+        return 4;
+    }
+    
+    func pageCollectionView(_ collectionView: ZBPageCollectionView, numberOfItemsInSection section: Int) -> Int {
+        return Int(arc4random_uniform(30)) + 20
+    }
+}
