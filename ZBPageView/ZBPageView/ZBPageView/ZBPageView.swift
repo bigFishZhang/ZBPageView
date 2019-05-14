@@ -18,6 +18,7 @@ class ZBPageView: UIView {
     
     init(frame: CGRect,titles:[String],childVcs:[UIViewController],
          parentVc:UIViewController,style:ZBTitleStyle) {
+        
         super.init(frame: frame)
         
         guard titles.count == childVcs.count else {
@@ -31,6 +32,8 @@ class ZBPageView: UIView {
         self.style    = style
         
         parentVc.automaticallyAdjustsScrollViewInsets = false
+        
+       
         
         setupUI()
     }

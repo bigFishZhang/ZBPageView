@@ -34,8 +34,8 @@ class ViewController: UIViewController {
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         layout.minimumLineSpacing  = 10
         layout.minimumInteritemSpacing = 10
-        layout.cols = 7
-        layout.rows = 3
+        layout.cols = 4
+        layout.rows = 2
 //        layout.
         //创建 pageView
         let pageFrame = CGRect(x: 0, y: 64, width: view.bounds.width, height:300)
@@ -90,6 +90,14 @@ extension ViewController:ZBPageCollectionViewDataSource{
     }
     
     func pageCollectionView(_ collectionView: ZBPageCollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Int(arc4random_uniform(30)) + 20
+        if section == 0 {
+            return 20
+        } else if section == 1 {
+            return 30
+        } else if section == 2 {
+            return 6
+        } else {
+            return 14
+        }
     }
 }

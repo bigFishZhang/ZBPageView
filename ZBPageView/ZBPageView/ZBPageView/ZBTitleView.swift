@@ -13,23 +13,23 @@ protocol ZBTitleViewDelegate:class {
 }
 
 class ZBTitleView: UIView {
-    
+    // MARK: 对外属性
     weak var delegate : ZBTitleViewDelegate?
-    
+    // MARK: 定义属性
     fileprivate var titles: [String]
     fileprivate var style : ZBTitleStyle
-    
     fileprivate lazy var currentIndex:Int = 0
     
+    // MARK: 存储属性
     fileprivate lazy var titleLabels:[UILabel] = [UILabel]()
     
+    // MARK: 控件属性
     fileprivate lazy var scrollView:UIScrollView = {
         let scrollView = UIScrollView(frame: self.bounds)
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.scrollsToTop = false
         return scrollView
     }()
-    
     fileprivate lazy var bottomLine:UIView = {
         let bottomLine = UIView()
         bottomLine.backgroundColor = self.style.scrollLineColor
@@ -38,8 +38,10 @@ class ZBTitleView: UIView {
         return bottomLine
     }()
     
-    
+    // MARK: 自定义构造函数
     init(frame: CGRect,titles:[String],style:ZBTitleStyle) {
+       
+
         self.titles = titles
         self.style  = style
         
@@ -136,6 +138,7 @@ extension ZBTitleView {
 }
 //MARK 监听事件
 extension ZBTitleView{
+    
     @objc fileprivate func titleLableClick(_ tapGes:UITapGestureRecognizer){
         //1 取出点击的View
         let targetLabel = tapGes.view as! UILabel
@@ -209,4 +212,56 @@ extension ZBTitleView:ZBContentViewDelegate{
     }
     
     
+}
+
+
+
+extension ZBTitleView {
+    func setTitleWithProgress(_ progress : CGFloat, sourceIndex : Int, targetIndex : Int) {
+        // 1.取出sourceLabel/targetLabel
+        let sourceLabel = titleLabels[sourceIndex]
+        let targetLabel = titleLabels[targetIndex]
+        
+        // 3.颜色的渐变(复杂)
+        let deltaRGB = UIColor.getRGBDelta( style.selectedColor,  style.normalColor)
+        let selectedRGB = style.selectedColor.getRGB()
+        let normalRGB = style.normalColor.getRGB()
+        targetLabel.textColor = UIColor(r: normalRGB.0 + deltaRGB.0 * progress , g:  normalRGB.1 + deltaRGB.1 * progress, b:  normalRGB.2 + deltaRGB.2 * progress)
+        sourceLabel.textColor = UIColor(r: selectedRGB.0 - deltaRGB.0 * progress , g:  selectedRGB.1 - deltaRGB.1 * progress, b:  selectedRGB.2 - deltaRGB.2 * progress)
+        
+//        // 3.1.取出变化的范围
+//        let colorDelta = (selectedColorRGB.0 - normalColorRGB.0, selectedColorRGB.1 - normalColorRGB.1, selectedColorRGB.2 - normalColorRGB.2)
+//
+//        // 3.2.变化sourceLabel
+//        sourceLabel.textColor = UIColor(r: selectedColorRGB.0 - colorDelta.0 * progress, g: selectedColorRGB.1 - colorDelta.1 * progress, b: selectedColorRGB.2 - colorDelta.2 * progress)
+//
+        // 3.2.变化targetLabel
+//        targetLabel.textColor = UIColor(r: normalColorRGB.0 + colorDelta.0 * progress, g: normalColorRGB.1 + colorDelta.1 * progress, b: normalColorRGB.2 + colorDelta.2 * progress)
+
+        // 4.记录最新的index
+        currentIndex = targetIndex
+        
+        
+        let moveTotalX = targetLabel.frame.origin.x - sourceLabel.frame.origin.x
+        let moveTotalW = targetLabel.frame.width - sourceLabel.frame.width
+        
+        // 5.计算滚动的范围差值
+        if style.isShowScrollLine {
+            bottomLine.frame.size.width = sourceLabel.frame.width + moveTotalW * progress
+            bottomLine.frame.origin.x = sourceLabel.frame.origin.x + moveTotalX * progress
+        }
+        
+//        // 6.放大的比例
+//        if style.isNeedScale {
+//            let scaleDelta = (style.scaleRange - 1.0) * progress
+//            sourceLabel.transform = CGAffineTransform(scaleX: style.scaleRange - scaleDelta, y: style.scaleRange - scaleDelta)
+//            targetLabel.transform = CGAffineTransform(scaleX: 1.0 + scaleDelta, y: 1.0 + scaleDelta)
+//        }
+        
+        // 7.计算cover的滚动
+//        if style.isShowCover {
+//            coverView.frame.size.width = style.isScrollEnable ? (sourceLabel.frame.width + 2 * style.coverMargin + moveTotalW * progress) : (sourceLabel.frame.width + moveTotalW * progress)
+//            coverView.frame.origin.x = style.isScrollEnable ? (sourceLabel.frame.origin.x - style.coverMargin + moveTotalX * progress) : (sourceLabel.frame.origin.x + moveTotalX * progress)
+//        }
+    }
 }
