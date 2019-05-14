@@ -8,6 +8,8 @@
 
 import UIKit
 
+private let kCollectionViewCell = "kCollectionViewCell"
+
 class ZBPageCollectionView: UIView {
     fileprivate var titles:[String]
     fileprivate var isTitleInTop:Bool
@@ -57,8 +59,33 @@ extension ZBPageCollectionView {
         let collectionViewY = isTitleInTop ? style.titleHeight : 0
         let collectionViewFrame = CGRect(x: 0, y: collectionViewY, width: bounds.width, height: bounds.height - style.titleHeight - pageControlHeight)
         let collectionView = UICollectionView(frame: collectionViewFrame, collectionViewLayout: layout)
+        collectionView.dataSource = self;
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: kCollectionViewCell)
+        collectionView.isPagingEnabled = true
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = UIColor.randomColor()
         addSubview(collectionView)
         
     }
+}
+
+extension ZBPageCollectionView:UICollectionViewDataSource{
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        return titles.count;
+        return 4;
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return Int(arc4random_uniform(30)) + 30;
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: kCollectionViewCell, for: indexPath)
+        
+        cell.backgroundColor  = UIColor.randomColor()
+        
+        return cell
+    }
+    
+    
 }

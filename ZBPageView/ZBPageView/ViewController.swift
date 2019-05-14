@@ -28,13 +28,15 @@ class ViewController: UIViewController {
         
         
         let layout = ZBPageCollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
-        layout.minimumLineSpacing  = 20
-        layout.minimumInteritemSpacing = 18
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        layout.minimumLineSpacing  = 10
+        layout.minimumInteritemSpacing = 10
+        layout.cols = 7
+        layout.rows = 3
 //        layout.
         //创建 pageView
-        let pageFrame = CGRect(x: 0, y: 64, width: view.bounds.width, height: view.bounds.height-64)
-        let pageCollectionView = ZBPageCollectionView(frame: pageFrame, titles: titles, style: style, isTitleInTop: true, layout: layout)
+        let pageFrame = CGRect(x: 0, y: 64, width: view.bounds.width, height:300)
+        let pageCollectionView = ZBPageCollectionView(frame: pageFrame, titles: titles, style: style, isTitleInTop: false, layout: layout)
         
         //pageView添加到控制器的View中
         view.addSubview(pageCollectionView)

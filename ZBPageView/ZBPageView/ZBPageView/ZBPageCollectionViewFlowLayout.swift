@@ -11,6 +11,7 @@ import UIKit
 class ZBPageCollectionViewFlowLayout: UICollectionViewFlowLayout {
     var cols:Int = 4 //列
     var rows:Int = 2 //行
+    
     fileprivate lazy var cellAttrs:[UICollectionViewLayoutAttributes] = [UICollectionViewLayoutAttributes]()
     fileprivate lazy var maxWidth:CGFloat = 0
 
@@ -36,12 +37,12 @@ extension ZBPageCollectionViewFlowLayout {
                 //2.2 创建 UICollectionViewLayoutAttributes
                 let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
                 //2.3 计算J所在页
-                let pageIndex = j / 8
-                let index = j % 8
+                let page = j / (cols * rows)
+                let index = j % (cols * rows)
  
                 //2.3 设置attr的fame
                 let itemY = sectionInset.top + (itemH + minimumLineSpacing) * CGFloat( index / cols)
-                let itemX = CGFloat(prePageCount) * collectionView!.bounds.width + (itemW + minimumInteritemSpacing) * CGFloat(index % cols)
+                let itemX = CGFloat(prePageCount + page) * collectionView!.bounds.width + (itemW + minimumInteritemSpacing) * CGFloat(index % cols)
                 attr.frame = CGRect(x: itemX, y: itemY, width: itemW, height: itemH)
                 //2.4 保存
                 cellAttrs.append(attr)
