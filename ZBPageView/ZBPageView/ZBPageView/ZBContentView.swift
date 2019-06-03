@@ -91,10 +91,13 @@ extension ZBContentView:UICollectionViewDelegate{
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         contentEndScroll()
+        scrollView.isScrollEnabled = true
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate{
             contentEndScroll()
+        }else{
+            scrollView.isScrollEnabled = false
         }
     }
     private func contentEndScroll(){
@@ -108,7 +111,9 @@ extension ZBContentView:UICollectionViewDelegate{
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        
         isForbiddenScroll = false
+        
         startOffsetX = scrollView.contentOffset.x
         
     }
